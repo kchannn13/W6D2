@@ -5,6 +5,14 @@ require 'active_support/inflector'
 
 class SQLObject
   def self.columns
+    list = []
+    hash = DBConnection.execute2
+    hash.each do |col, v|
+      if col == "name"
+        list << v.to_sym
+      end
+    end
+    list
     # ...
   end
 
@@ -12,10 +20,12 @@ class SQLObject
   end
 
   def self.table_name=(table_name)
+    @table_name = table_name
     # ...
   end
 
   def self.table_name
+    @table_name ||= self.to_s.tableize
     # ...
   end
 
